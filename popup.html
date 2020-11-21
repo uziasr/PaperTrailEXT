@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Paper Trail Book-Marker</title>
+    <Link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css">
+    </Link>
+    <script>
+        function isLoggedIn() {
+            return localStorage.getItem("token") || false
+        }
+        let credentials = {
+            email: "",
+            password: ""
+        }
+
+        function credentialHandler(name, value) {
+            credentials = {
+                ...credentials,
+                [name]: value
+            }
+        }
+
+        function loginHandler() {
+            fetch("https://papertrail1.herokuapp.com/api/users/login", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                })
+                .then(response => response.json())
+                .then(res => {
+                    chrome.storage.local.set({
+                        token: res.data.token
+                    }, function () {
+                        console.log('Value is set to ' + value);
+                    });
+                    console.log(res)
+                })
+                .catch(err => console.log(err))
+        }
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        html,
+        body {
+            font-family: "Open Sans", "sans-serif";
+            font-size: 14px;
+            margin: 0;
+            min-height: 180px;
+            padding: 0;
+            width: 384px;
+        }
+
+        h1 {
+            font-family: "Menlo", monospace;
+            font-size: 22px;
+            font-weight: 400;
+            margin: 0;
+            color: #2f5876
+        }
+
+        img {
+            width: 30px;
+        }
+
+        .modal-header {
+            align-items: center;
+            border-bottom: 0.5px solid #dadada
+        }
+
+        .model-content {
+            padding: 0 22px;
+        }
+
+        .model-icons {
+            border-top: 0.5px solid #dadada;
+            height: 50px;
+            width: 100%;
+        }
+
+        .logo {
+            padding: 16px;
+        }
+
+        .logo-icon {
+            vertical-align: text-bottom;
+            margin-right: 12px;
+        }
+
+        .version {
+            color: #444;
+            font-size: 18px;
+            text-align: right;
+            padding-bottom: 0;
+            margin: 5px 0 0 0;
+        }
+
+        .login-register {
+            display: flex;
+            flex-direction: column;
+            margin-top: 12px;
+            width: 90%;
+            justify-content: center;
+            margin: 10px auto;
+        }
+
+        .input-model {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            height: 20px;
+        }
+
+        .login-register-button {
+            height: 20px;
+            width: 50%;
+            margin: auto;
+        }
+
+        .login-register-button:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="modal-header">
+        <h1 class="logo">
+            <img src="images/icon_128.png" alt="Paper Trail" class="logo-icon"> Paper Trail Book-Marker
+            <p class="version">(1.0.0)</p>
+        </h1>
+    </div>
+    <div class="modal-content">
+        <p>Easily save tabs</p>
+    </div>
+    <div class="model-icons">
+        <div class="flex-container">
+            <form onsubmit="return false;" class="login-register">
+                <h1 class="logo" style="text-align: center">Please Login</h1>
+                <input class="input-model" type="text" name="email" placeholder="email"
+                    onchange="credentialHandler('email',this.value)">
+                </input>
+                <input class="input-model" type="password" name="password" placeholder="password"
+                    onchange="credentialHandler('password',this.value)">
+                </input>
+                <button onclick="loginHandler()" class="login-register-button">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
