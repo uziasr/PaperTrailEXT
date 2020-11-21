@@ -99,9 +99,33 @@
         }
 
         #category-wrap {
+            width: 100%;
             visibility: hidden;
             display: flex;
             flex-direction: column;
+        }
+
+        #category-link {
+            display: none;
+            text-decoration: none;
+            color: black;
+            margin: 10px auto;
+        }
+
+        .link-text {
+            text-align: center;
+            color: black;
+            padding-top: 25px;
+            text-decoration: none;
+        }
+        #add-link-success{
+            display:none;
+        }
+
+        .success-text{
+            color:green;
+            font-size: 28px;
+            text-align: center;
         }
     </style>
 </head>
@@ -117,7 +141,7 @@
         <p class="description">Organize your research and move on</p>
     </div>
     <div class="model-icons">
-        <div class="flex-container">
+        <div class="flex-container" id="add-link-process">
             <form class="login-register form-model">
                 <h1 class="logo" style="text-align: center">Please Login</h1>
                 <input id="email-input" class="input-model" type="text" name="email" placeholder="email">
@@ -136,14 +160,22 @@
                     <label>Your Projects</label>
                     <select id="project-drop-select" style="display: hidden;">
                     </select>
+                    <a id="category-error" href="https://www.google.com" style="display: none;">
+                        <p class="link-text">Create a category for this project</p>
+                    </a>
                     <div id="category-wrap">
                         <label>Project Categories</label>
-                        <select id="category-drop-select"></select>
+                        <select name="category_id" id="category-drop-select"></select>
+                        <button id="add-project" class="login-register-button" style="margin-top: 20px;">add
+                            project</button>
                     </div>
-                    <button id="add-project">add project</button>
                 </div>
             </form>
         </div>
+        <div class="flex-container" id="add-link-success">
+                <p class="success-text">Resource Added!</p>
+        </div>
+
     </div>
     <script src="popup.js"></script>
 </body>
