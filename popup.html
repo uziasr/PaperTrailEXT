@@ -8,42 +8,6 @@
     <title>Paper Trail Book-Marker</title>
     <Link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css">
     </Link>
-    <script>
-        function isLoggedIn() {
-            return localStorage.getItem("token") || false
-        }
-        let credentials = {
-            email: "",
-            password: ""
-        }
-
-        function credentialHandler(name, value) {
-            credentials = {
-                ...credentials,
-                [name]: value
-            }
-        }
-
-        function loginHandler() {
-            fetch("https://papertrail1.herokuapp.com/api/users/login", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(credentials)
-                })
-                .then(response => response.json())
-                .then(res => {
-                    chrome.storage.local.set({
-                        token: res.data.token
-                    }, function () {
-                        console.log('Value is set to ' + value);
-                    });
-                    console.log(res)
-                })
-                .catch(err => console.log(err))
-        }
-    </script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
@@ -67,6 +31,10 @@
 
         img {
             width: 30px;
+        }
+
+        .description {
+            text-align: center;
         }
 
         .modal-header {
@@ -101,7 +69,7 @@
             margin: 5px 0 0 0;
         }
 
-        .login-register {
+        .form-model {
             display: flex;
             flex-direction: column;
             margin-top: 12px;
@@ -136,22 +104,33 @@
         </h1>
     </div>
     <div class="modal-content">
-        <p>Easily save tabs</p>
+        <p class="description">Organize your research and move on</p>
     </div>
     <div class="model-icons">
         <div class="flex-container">
-            <form onsubmit="return false;" class="login-register">
+            <form class="login-register form-model">
                 <h1 class="logo" style="text-align: center">Please Login</h1>
-                <input class="input-model" type="text" name="email" placeholder="email"
-                    onchange="credentialHandler('email',this.value)">
+                <input id="email-input" class="input-model" type="text" name="email" placeholder="email">
                 </input>
-                <input class="input-model" type="password" name="password" placeholder="password"
-                    onchange="credentialHandler('password',this.value)">
+                <input id="password-input" class="input-model" type="password" name="password" placeholder="password">
                 </input>
-                <button onclick="loginHandler()" class="login-register-button">Login</button>
+                <button id="login-button" class="login-register-button">Login</button>
+            </form>
+            <form class="add-site form-model" style="display: hidden;">
+                <!-- <h1 class="logo" style="text-align: center">You are logged in!</h1> -->
+                <label>Name</label>
+                <input id="url-name" class="input-model" type="text" name="name"></input>
+                <label>Current url</label>
+                <input id="url-input" class="input-model" type="text" name="url"></input>
+                <div id="project-drop">
+                    <label>Your Projects</label>
+                    <select id="project-drop-select" style="display: hidden;">
+                    </select>
+                </div>
             </form>
         </div>
     </div>
+    <script src="popup.js"></script>
 </body>
 
 </html>
