@@ -93,6 +93,16 @@
         .login-register-button:hover {
             cursor: pointer;
         }
+
+        #project-drop-select {
+            width: 100%;
+        }
+
+        #category-wrap {
+            visibility: hidden;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -126,6 +136,11 @@
                     <label>Your Projects</label>
                     <select id="project-drop-select" style="display: hidden;">
                     </select>
+                    <div id="category-wrap">
+                        <label>Project Categories</label>
+                        <select id="category-drop-select"></select>
+                    </div>
+                    <button id="add-project">add project</button>
                 </div>
             </form>
         </div>

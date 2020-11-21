@@ -3,6 +3,12 @@ let credentials = {
     password: ""
 }
 
+let newLink = {
+    url: window.location.href,
+    name: null,
+    category_id: null
+}
+
 let currentToken = true //getToken()
 
 // function  getToken() {
@@ -22,13 +28,13 @@ function credentialHandler(e) {
     }
 }
 
-// function isLoggedIn() {
-//     if (currentToken) {
-//         document.getElementsByClassName("login-register")[0].style.display = "none"
-//     } else {
-//         document.getElementsByClassName("add-site")[0].style.display = "flex"
-//     }
-// }
+function linkHandler(e) {
+    newLink = {
+        ...newLink,
+        [e.target.name]: e.target.value
+    }
+    console.log(newLink)
+}
 
 if (currentToken) {
     console.log("I am logged in")
@@ -37,6 +43,13 @@ if (currentToken) {
 } else {
     document.getElementsByClassName("add-site")[0].style.display = "flex"
 }
+
+
+
+
+let projectSelect = document.getElementById("project-drop-select")
+let addProject = document.getElementById("add-project")
+addProject.disabled =  newLink.url && newLink.category_id ? false : true
 
 function loggedInSetup() {
     fetch("https://papertrail1.herokuapp.com/api/projects/all", {
@@ -48,18 +61,56 @@ function loggedInSetup() {
         .then(response => response.json())
         .then(res => {
             if (res.length) {
-                let projectSelect = document.getElementById("project-drop-select")
                 projectSelect.style.display = "flex"
-                for(let project of res){
+                let selectNullOption = document.createElement("OPTION")
+                projectSelect.appendChild(selectNullOption)
+                for (let project of res) {
                     let selectOption = document.createElement("OPTION")
                     selectOption.value = project.id
                     selectOption.text = project.name
                     projectSelect.appendChild(selectOption)
                 }
-                // projectSelect.appendChild()
             }
         })
         .catch(err => console.log(err))
+}
+
+projectSelect.onchange = fetchCategories
+let categorySelect = document.getElementById("category-drop-select")
+
+function fetchCategories(e) {
+    console.log( "hello",e.target.value)
+
+    if (e.target.value) {
+        fetch(`https://papertrail1.herokuapp.com/api/projects/${e.target.value}`, {
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYwNTkzMzE3NzczNCwiaWQiOjEsImV4cCI6MTYwNTk2NDcxMzczNH0.gv-mX-yf-gaxci9hLD10hvYSGJbliuyTRPKrbsuzKLQ"
+            }
+        })
+        .then(response=>response.json())
+        .then(res=>{
+            if(res.categories){
+                document.getElementById("category-wrap").style.visibility = "visible"
+                document.getElementById("category-wrap").style.margin = "12px 0 20px 0"
+                let selectNullOption = document.createElement("OPTION")
+                categorySelect.appendChild(selectNullOption)
+                for (let category of res.categories) {
+                    let categoryOption = document.createElement("OPTION")
+                    categoryOption.value = category.id
+                    categoryOption.text = category.category
+                    categorySelect.appendChild(categoryOption)
+                }
+            }
+        })
+        .catch(err=>console.log(err))
+    } else {
+        document.getElementById("category-wrap").style.visibility = "hidden"
+        document.getElementById("category-wrap").style.margin = "0"
+        while (categorySelect.firstChild) {
+            categorySelect.removeChild(categorySelect.firstChild);
+        }
+    }
 }
 
 
@@ -69,7 +120,10 @@ document.getElementById("email-input").onchange = credentialHandler
 document.getElementById("password-input").onchange = credentialHandler
 
 // bookmark DOM
-document.getElementById("url-input").value = window.location.href
+document.getElementById("url-input").value = newLink.url
+document.getElementById("url-name").onchange = linkHandler
+document.getElementById("url-input").onchange = linkHandler
+
 
 
 function loginHandler() {
