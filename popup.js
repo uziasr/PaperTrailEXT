@@ -4,20 +4,20 @@ let credentials = {
 }
 
 let newLink = {
-    url: window.location.href,
+    url: null,
     name: null,
     category_id: null
 }
 
 
 
-let currentToken = true //getToken()
+let currentToken = true
+// chrome.runtime.onMessage.addListener(gotMessage) //getToken()
 
-// function  getToken() {
-//     return chrome.storage.local.get(['token'], function(result) {
-//         return result.token
-//       }) || false
+// function gotMessage(message, sender, sendResponse){
+//     console.log(message)
 // }
+
 
 // function isLoggedIn() {
 //     return localStorage.getItem("token") || false
@@ -115,7 +115,7 @@ function fetchCategories(e) {
                     for (let category of res.categories) {
                         let categoryOption = document.createElement("OPTION")
                         categoryOption.value = category.id
-                        categoryOption.text = category.category
+                        categoryOption.text = category.name
                         categorySelect.appendChild(categoryOption)
                     }
                 } else {

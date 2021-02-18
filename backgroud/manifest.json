@@ -1,0 +1,16 @@
+{
+    "manifest_version":2,
+    "name":"Paper Trail Book-Marker",
+    "version": "1.0.0",
+    "content_scripts":[
+        {
+            "matches":[
+                "<all_urls>"
+            ],
+            "js": ["content.js"]
+        }
+    ],
+    "background": {
+        "js": "background.js"
+    }
+}
